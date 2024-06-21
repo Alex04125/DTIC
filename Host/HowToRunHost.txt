@@ -1,0 +1,1 @@
+docker run -d --privileged --name docker-host -p 2375:2375 host

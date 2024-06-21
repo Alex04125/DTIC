@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-host
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-host
+  template:
+    metadata:
+      labels:
+        app: docker-host
+    spec:
+      containers:
+      - name: docker-host
+        image: alextno/host:latest
+        ports:
+        - containerPort: 2375
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: shared-data
+          mountPath: /shared_data
+      volumes:
+      - name: shared-data
+        persistentVolumeClaim:
+          claimName: shared-data-pvc

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: create-module
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: create-module
+  template:
+    metadata:
+      labels:
+        app: create-module
+    spec:
+      containers:
+      - name: create-module
+        image: alextno/create_module:latest
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - name: shared-data
+          mountPath: /shared_data
+      volumes:
+      - name: shared-data
+        persistentVolumeClaim:
+          claimName: shared-data-pvc

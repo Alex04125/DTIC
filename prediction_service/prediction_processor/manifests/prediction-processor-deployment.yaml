@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prediction-processor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prediction-processor
+  template:
+    metadata:
+      labels:
+        app: prediction-processor
+    spec:
+      containers:
+      - name: prediction-processor
+        image: alextno/prediction_processor:latest
+        env:
+        - name: DOCKER_HOST
+          value: "tcp://docker-host:2375"
+        volumeMounts:
+        - name: shared-data
+          mountPath: /shared_data
+      volumes:
+      - name: shared-data
+        persistentVolumeClaim:
+          claimName: shared-data-pvc

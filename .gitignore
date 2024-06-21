@@ -1,0 +1,9 @@
+# .gitignore
+VS-DTIC MVP/data_registry_service/data_registry_service_env/
+VS-DTIC MVP/instance_service/instance_creator/instance_creator/Lib/site-packages/
+VS-DTIC MVP/instance_service/instance_processor/instance_processor/Lib/site-packages/
+VS-DTIC MVP/module_service/create_module/create_module_env/
+VS-DTIC MVP/module_service/model_packager/model_packager_env/
+VS-DTIC MVP/prediction_service/prediction_creator/prediction_creator/Lib/site-packages/
+VS-DTIC MVP/prediction_service/prediction_processor/prediction_processor/Lib/site-packages/
+frontend/node_modules/

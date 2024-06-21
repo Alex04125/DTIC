@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prediction-creator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prediction-creator
+  template:
+    metadata:
+      labels:
+        app: prediction-creator
+    spec:
+      containers:
+      - name: prediction-creator
+        image: alextno/prediction_creator:latest
+        env:
+        - name: DOCKER_HOST
+          value: "tcp://docker-host:2375"
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: shared-data
+          mountPath: /shared_data
+      volumes:
+      - name: shared-data
+        persistentVolumeClaim:
+          claimName: shared-data-pvc

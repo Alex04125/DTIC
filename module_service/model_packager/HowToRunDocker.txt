@@ -1,0 +1,2 @@
+1. Build image with credentials for docker: docker build --build-arg DOCKER_USERNAME=username --build-arg DOCKER_PASSWORD=password -t model_packager .
+2. Run the container with this script to mount the container to docker locally: docker run -v /var/run/docker.sock:/var/run/docker.sock model_packager

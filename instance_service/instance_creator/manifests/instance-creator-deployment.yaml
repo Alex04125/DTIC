@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: instance-creator-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: instance-creator
+  template:
+    metadata:
+      labels:
+        app: instance-creator
+    spec:
+      containers:
+      - name: instance-creator
+        image: alextno/instance_creator:latest
+        ports:
+        - containerPort: 4000

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+spec:
+  replicas: 1  # example of running two replicas for redundancy
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - name: api-gateway
+        image: alextno/gateway:latest  # Ensure your image is hosted on a registry like Docker Hub
+        ports:
+        - containerPort: 8080

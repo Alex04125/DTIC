@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: instance-processor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: instance-processor
+  template:
+    metadata:
+      labels:
+        app: instance-processor
+    spec:
+      containers:
+      - name: instance-processor
+        image: alextno/instance_processor:latest
+        env:
+        - name: DOCKER_HOST
+          value: "tcp://docker-host:2375"
+        volumeMounts:
+        - name: shared-data
+          mountPath: /shared_data
+      volumes:
+      - name: shared-data
+        persistentVolumeClaim:
+          claimName: shared-data-pvc

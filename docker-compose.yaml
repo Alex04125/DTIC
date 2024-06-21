@@ -1,0 +1,136 @@
+version: '3.8'
+
+services:
+  docker_host:
+    image: host:latest
+    container_name: docker_host
+    privileged: true
+    ports:
+      - "2375:2375"
+    networks:
+      - app-network
+    volumes:
+      - shared_data:/shared_data
+    restart: unless-stopped
+
+  model_packager:
+    image: model_packager:latest
+    container_name: model_packager
+    depends_on:
+      - docker_host
+    environment:
+      - DOCKER_HOST=tcp://docker_host:2375
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  create_module:
+    image: create_module:latest
+    container_name: create_module
+    depends_on:
+      - mysql
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  instance_creator:
+    image: instance_creator:latest
+    ports:
+      - "4000:4000"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  instance_processor:
+    image: instance_processor:latest
+    container_name: instance_processor
+    depends_on:
+      - docker_host
+      - rabbitmq
+    environment:
+      - DOCKER_HOST=tcp://docker_host:2375
+    networks:
+      - app-network
+    volumes:
+      - shared_data:/shared_data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_server
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: radiance
+      MYSQL_USER: alek
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+  prediction_creator:
+    image: prediction_creator:latest
+    container_name: prediction_creator
+    environment:
+      - DOCKER_HOST=tcp://docker_host:2375
+    networks:
+      - app-network
+    volumes:
+      - shared_data:/shared_data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  prediction_processor:
+    image: prediction_processor:latest
+    container_name: prediction_processor
+    depends_on:
+      - rabbitmq
+      - docker_host
+    environment:
+      - DOCKER_HOST=tcp://docker_host:2375
+    networks:
+      - app-network
+    volumes:
+      - shared_data:/shared_data
+    restart: unless-stopped
+
+  api_gateway:
+    image: api_gateway:latest
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  data_registry:
+    image: data_registry:latest
+    container_name: data_registry
+    ports:
+      - "7000:7000"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  shared_data:
+  mysql_data:

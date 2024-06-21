@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-packager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: model-packager
+  template:
+    metadata:
+      labels:
+        app: model-packager
+    spec:
+      containers:
+      - name: model-packager
+        image: alextno/model_packager:latest
+        env:
+          - name: DOCKER_HOST
+            value: "tcp://docker-host:2375"

@@ -1,0 +1,17 @@
+aio-pika==9.4.1
+aiormq==6.8.0
+certifi==2024.2.2
+charset-normalizer==3.3.2
+docker==7.0.0
+greenlet==3.0.3
+idna==3.7
+multidict==6.0.5
+mysql-connector-python==8.4.0
+packaging==24.0
+pamqp==3.3.0
+# pywin32==306
+requests==2.31.0
+SQLAlchemy==2.0.30
+typing_extensions==4.11.0
+urllib3==2.2.1
+yarl==1.9.4

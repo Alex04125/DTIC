@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-registry
+  template:
+    metadata:
+      labels:
+        app: data-registry
+    spec:
+      containers:
+      - name: data-registry
+        image: alextno/data_registry:latest
+        ports:
+        - containerPort: 7000
