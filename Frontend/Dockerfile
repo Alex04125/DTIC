@@ -1,6 +1,5 @@
-# Dockerfile for the React frontend
-# Use the official Node.js image as the base image
-FROM node:14
+# Use a multi-stage build to minimize the final image size
+FROM node:14.17.0 as build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -14,8 +13,15 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Expose port 3000 to access the application
-EXPOSE 3000
+# Build the React application
+RUN npm run build
 
-# Command to start the application
-CMD ["npm", "start"]
+# Use Nginx to serve the static files
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expose port 80 to access the application
+EXPOSE 80
+
+# Command to start Nginx
+CMD ["nginx", "-g", "daemon off;"]

@@ -5,14 +5,15 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   rules:
   - host: frontend.local
     http:
       paths:
-      - path: /
+      - path: /frontend
         pathType: Prefix
         backend:
           service:
             name: frontend-service
             port:
-              number: 3000
+              number: 80
